@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NovaX File Converter</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#07050b;
+    color:#fff;
+    min-height:100vh;
+}
+
+nav{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 7%;
+    border-bottom:1px solid #251934;
+    background:#0b0810;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:bold;
+    color:#a855f7;
+}
+
+nav span{
+    color:#aaa;
+    font-size:14px;
+}
+
+.hero{
+    text-align:center;
+    padding:55px 20px 35px;
+}
+
+.hero h1{
+    font-size:clamp(45px,8vw,90px);
+    line-height:1;
+    letter-spacing:-4px;
+    margin-bottom:20px;
+}
+
+.hero h1 span{
+    color:#a855f7;
+}
+
+.hero p{
+    color:#aaa;
+    font-size:17px;
+    max-width:650px;
+    margin:auto;
+    line-height:1.6;
+}
+
+.container{
+    width:min(900px,92%);
+    margin:20px auto 60px;
+}
+
+.converter{
+    background:#100c16;
+    border:1px solid #2b1d3c;
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
+.drop-zone{
+    border:2px dashed #633a86;
+    border-radius:20px;
+    padding:45px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:.25s;
+    background:#0d0912;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover{
+    border-color:#a855f7;
+    background:#160d20;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:12px;
+}
+
+.drop-zone h2{
+    margin-bottom:8px;
+}
+
+.drop-zone p{
+    color:#888;
+    margin-bottom:20px;
+}
+
+input[type="file"]{
+    display:none;
+}
+
+.choose-btn{
+    display:inline-block;
+    background:#7c3aed;
+    padding:13px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.file-info{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    background:#17101f;
+    border-radius:12px;
+    color:#ddd;
+}
+
+.controls{
+    display:none;
+    margin-top:22px;
+}
+
+label{
+    display:block;
+    color:#bbb;
+    margin-bottom:8px;
+}
+
+select{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #382348;
+    background:#0b0810;
+    color:white;
+    font-size:16px;
+    outline:none;
+}
+
+select:focus{
+    border-color:#a855f7;
+}
+
+.button-row{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    padding:14px 22px;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.convert-btn{
+    background:#8b5cf6;
+    color:white;
+    flex:1;
+}
+
+.convert-btn:hover{
+    background:#a855f7;
+}
+
+.reset-btn{
+    background:#24182e;
+    color:#ddd;
+}
+
+.progress{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-bar{
+    height:8px;
+    background:#21152b;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:#a855f7;
+    transition:.3s;
+}
+
+.status{
+    margin-top:10px;
+    color:#aaa;
+    font-size:14px;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    background:#120d18;
+    border:1px solid #342143;
+    border-radius:15px;
+    text-align:center;
+}
+
+.result h3{
+    color:#c084fc;
+    margin-bottom:15px;
+}
+
+.download-btn{
+    display:inline-block;
+    background:#a855f7;
+    color:white;
+    padding:13px 25px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.preview{
+    max-width:100%;
+    max-height:300px;
+    border-radius:10px;
+    margin:15px auto;
+    display:none;
+}
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:25px;
+}
+
+.feature{
+    background:#100c16;
+    border:1px solid #251934;
+    padding:20px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.feature div{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:#888;
+    font-size:13px;
+    line-height:1.5;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#666;
+    border-top:1px solid #1d1426;
+}
+
+@media(max-width:650px){
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .converter{
+        padding:18px;
+    }
+
+    .hero{
+        padding-top:40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">NovaX</div>
+    <span>File Converter</span>
+</nav>
+
+<section class="hero">
+    <h1>Convert <span>Anything</span></h1>
+    <p>
+        Simple browser-based file conversion. Upload your image or PDF,
+        choose the format and download your converted file.
+    </p>
+</section>
+
+<div class="container">
+
+<div class="converter">
+
+    <div class="drop-zone" id="dropZone">
+
+        <div class="upload-icon">📁</div>
+
+        <h2>Upload your file</h2>
+
+        <p>PNG, JPG, JPEG, WEBP or PDF</p>
+
+        <label for="fileInput" class="choose-btn">
+            Choose File
+        </label>
+<input
+        type="file"
+        id="fileInput"
+        accept=".png,.jpg,.jpeg,.webp,.pdf,image/png,image/jpeg,image/webp,application/pdf"
+    >
+
+    </div>
+
+    <div class="file-info" id="fileInfo"></div>
+
+    <img id="preview" class="preview">
+
+    <div class="controls" id="controls">
+
+        <label for="format">Convert to:</label>
+
+        <select id="format">
+            <option value="jpg">JPG</option>
+            <option value="png">PNG</option>
+            <option value="webp">WEBP</option>
+            <option value="pdf">PDF</option>
+        </select>
+
+        <div class="button-row">
+
+            <button class="convert-btn" id="convertBtn">
+                Convert File
+            </button>
+
+            <button class="reset-btn" id="resetBtn">
+                Reset
+            </button>
+
+        </div>
+
+        <div class="progress" id="progress">
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="status" id="status">
+                Preparing...
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="result" id="result">
+
+        <h3>✓ Conversion Complete</h3>
+
+        <p id="resultText"></p>
+
+        <br>
+
+        <a id="downloadBtn" class="download-btn">
+            Download File
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="features">
+
+    <div class="feature">
+        <div>⚡</div>
+        <h3>Fast</h3>
+        <p>Conversions happen directly in your browser.</p>
+    </div>
+
+    <div class="feature">
+        <div>🔒</div>
+        <h3>Private</h3>
+        <p>Your image conversions don't need to be uploaded to a server.</p>
+    </div>
+
+    <div class="feature">
+        <div>✨</div>
+        <h3>Simple</h3>
+        <p>Upload, choose a format and download.</p>
+    </div>
+
+</div>
+
+</div>
+
+<footer>
+    NovaX © 2026 — File Conversion Tools
+</footer>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+const fileInput = document.getElementById("fileInput");
+const dropZone = document.getElementById("dropZone");
+const fileInfo = document.getElementById("fileInfo");
+const controls = document.getElementById("controls");
+const format = document.getElementById("format");
+const convertBtn = document.getElementById("convertBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const status = document.getElementById("status");
+
+const result = document.getElementById("result");
+const resultText = document.getElementById("resultText");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const preview = document.getElementById("preview");
+
+let selectedFile = null;
+let downloadURL = null;
+
+
+/* =========================
+   FILE SELECTION
+========================= */
+
+fileInput.addEventListener("change", function(){
+
+    if(this.files && this.files.length > 0){
+
+        handleFile(this.files[0]);
+
+    }
+
+});
+
+
+/* =========================
+   DRAG AND DROP
+========================= */
+
+dropZone.addEventListener("click", function(e) {
+    if (e.target !== fileInput && !e.target.closest("label")) {
+        fileInput.click();
+    }
+});
+
+dropZone.addEventListener("dragover", function(e){
+
+    e.preventDefault();
+
+    dropZone.classList.add("dragover");
+
+});
+
+dropZone.addEventListener("dragleave", function(){
+
+    dropZone.classList.remove("dragover");
+
+});
+
+dropZone.addEventListener("drop", function(e){
+
+    e.preventDefault();
+
+    dropZone.classList.remove("dragover");
+
+    if(e.dataTransfer.files.length > 0){
+
+        handleFile(e.dataTransfer.files[0]);
+
+    }
+
+});
+
+
+/* =========================
+   HANDLE FILE
+========================= */
+
+function handleFile(file){
+
+    selectedFile = file;
+
+    fileInfo.style.display = "block";
+
+    fileInfo.innerHTML =
+        "<strong>Selected:</strong> " +
+        escapeHTML(file.name) +
+        "<br><small>" +
+        formatBytes(file.size) +
+        "</small>";
+
+    controls.style.display = "block";
+
+    result.style.display = "none";
+
+    preview.style.display = "none";
+
+    /*
+       Show image preview
+    */
+
+    if(file.type.startsWith("image/")){
+
+        const url = URL.createObjectURL(file);
+
+        preview.src = url;
+
+        preview.style.display = "block";
+
+    }
+
+    /*
+       PDF conversion options
+    */
+
+    if(file.type === "application/pdf"){
+
+        format.innerHTML = `
+            <option value="jpg">PDF → JPG</option>
+        `;
+
+    }else{
+
+        format.innerHTML = `
+            <option value="jpg">JPG</option>
+            <option value="png">PNG</option>
+            <option value="webp">WEBP</option>
+            <option value="pdf">PDF</option>
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   CONVERT
+========================= */
+
+convertBtn.addEventListener("click", async function(){
+
+    if(!selectedFile){
+
+        alert("Please choose a file first.");
+
+        return;
+
+    }
+
+    progress.style.display = "block";
+
+    progressFill.style.width = "20%";
+
+    status.textContent = "Reading file...";
+
+    result.style.display = "none";
+
+    try{
+
+        if(selectedFile.type === "application/pdf"){
+
+            await convertPDF();
+
+        }else if(selectedFile.type.startsWith("image/")){
+
+            await convertImage();
+
+        }else{
+
+            throw new Error("Unsupported file type.");
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        status.textContent = "Conversion failed.";
+
+        alert(
+            "This file could not be converted in the browser. " +
+            "Please try another file."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   IMAGE CONVERSION
+========================= */
+
+function convertImage(){
+
+    return new Promise((resolve,reject)=>{
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+
+            progressFill.style.width = "45%";
+
+            status.textContent = "Processing image...";
+
+            const img = new Image();
+
+            img.onload = function(){
+
+                try{
+
+                    const canvas = document.createElement("canvas");
+
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+
+                    const ctx = canvas.getContext("2d");
+
+                    /*
+                       White background for JPG
+                    */
+
+                    const selectedFormat = format.value;
+
+                    if(selectedFormat === "jpg"){
+
+                        ctx.fillStyle = "#ffffff";
+
+                        ctx.fillRect(
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+                    }
+
+                    ctx.drawImage(
+                        img,
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+
+                    progressFill.style.width = "75%";
+
+                    status.textContent = "Creating converted file...";
+
+                    let mime;
+
+                    if(selectedFormat === "jpg"){
+
+                        mime = "image/jpeg";
+
+                    }else if(selectedFormat === "png"){
+
+                        mime = "image/png";
+
+                    }else if(selectedFormat === "webp"){
+
+                        mime = "image/webp";
+
+                    }else if(selectedFormat === "pdf"){
+
+                        createPDFfromCanvas(
+                            canvas,
+                            selectedFile.name
+                        );
+
+                        resolve();
+
+                        return;
+
+                    }
+
+                    canvas.toBlob(function(blob){
+
+                        if(!blob){
+
+                            reject(
+                                new Error("Could not create image.")
+                            );
+
+                            return;
+
+                        }
+
+                        progressFill.style.width = "100%";
+
+                        status.textContent = "Done!";
+
+                        showResult(
+                            blob,
+                            selectedFile.name,
+                            selectedFormat
+                        );
+
+                        resolve();
+
+                    },mime,0.92);
+
+                }catch(error){
+
+                    reject(error);
+
+                }
+
+            };
+
+            img.onerror = function(){
+
+                reject(
+                    new Error("Could not read image.")
+                );
+
+            };
+
+            img.src = e.target.result;
+
+        };
+
+        reader.onerror = function(){
+
+            reject(
+                new Error("Could not read file.")
+            );
+
+        };
+
+        reader.readAsDataURL(selectedFile);
+
+    });
+
+}
+
+
+/* =========================
+   PDF → JPG
+========================= */
+
+async function convertPDF(){
+
+    /*
+       PDF.js is loaded dynamically.
+    */
+
+    progressFill.style.width = "35%";
+
+    status.textContent = "Loading PDF engine...";
+
+    await loadScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs",
+        true
+    );
+
+    /*
+       Browser support for PDF.js modules varies.
+       Use browser PDF rendering fallback if necessary.
+    */
+
+    const pdfURL = URL.createObjectURL(selectedFile);
+
+    /*
+       Open PDF in a new tab as fallback.
+    */
+
+    progressFill.style.width = "100%";
+
+    status.textContent =
+        "PDF selected. Browser PDF rendering varies by device.";
+
+    result.style.display = "block";
+
+    resultText.textContent =
+        "For reliable PDF → JPG conversion, a PDF rendering library/server is required. " +
+        "Your PDF can be opened below.";
+
+    downloadBtn.textContent = "Open PDF";
+
+    downloadBtn.href = pdfURL;
+
+    downloadBtn.download = "";
+
+}
+
+
+/* =========================
+   IMAGE → PDF
+========================= */
+
+function createPDFfromCanvas(canvas,fileName){
+
+    /*
+       Creates a basic PDF manually.
+       No external library required.
+    */
+
+    progressFill.style.width = "85%";
+
+    status.textContent = "Building PDF...";
+
+    const jpegData = canvas.toDataURL(
+        "image/jpeg",
+        0.92
+    );
+
+    const base64 = jpegData.split(",")[1];
+
+    const binary = atob(base64);
+
+    const imageBytes = new Uint8Array(binary.length);
+
+    for(let i=0;i<binary.length;i++){
+
+        imageBytes[i] = binary.charCodeAt(i);
+
+    }
+
+    const pdf = buildSimplePDF(
+        imageBytes,
+        canvas.width,
+        canvas.height
+    );
+
+    const blob = new Blob(
+        [pdf],
+        {type:"application/pdf"}
+    );
+
+    progressFill.style.width = "100%";
+
+    status.textContent = "Done!";
+
+    showResult(
+        blob,
+        fileName,
+        "pdf"
+    );
+
+}
+
+
+/* =========================
+   SIMPLE PDF BUILDER
+========================= */
+
+function buildSimplePDF(
+    imageBytes,
+    width,
+    height
+){
+
+    const encoder =
+        new TextEncoder();
+
+    const objects = [];
+
+    const header =
+        "%PDF-1.4\n";
+
+    objects.push(
+        encoder.encode(header)
+    );
+
+    let offsets = [0];
+
+    let position =
+        header.length;
+
+
+    function addObject(text){
+
+        const bytes =
+            encoder.encode(text);
+
+        offsets.push(position);
+
+        objects.push(bytes);
+
+        position += bytes.length;
+
+    }
+
+
+    /*
+       Object 1
+    */
+
+    addObject(
+        "1 0 obj\n" +
+        "<< /Type /Catalog /Pages 2 0 R >>\n" +
+        "endobj\n"
+    );
+
+
+    /*
+       Object 2
+    */
+
+    addObject(
+        "2 0 obj\n" +
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>\n" +
+        "endobj\n"
+    );
+
+
+    /*
+       Object 3
+    */
+
+    addObject(
+        "3 0 obj\n" +
+        "<< /Type /Page " +
+        "/Parent 2 0 R " +
+        "/MediaBox [0 0 " +
+        width +
+        " " +
+        height +
+        "] " +
+        "/Resources << /XObject << /Im4 4 0 R >> >> " +
+        "/Contents 5 0 R >>\n" +
+        "endobj\n"
+    );
+
+
+    /*
+       Object 4 — Image
+    */
+
+    const imageHeader =
+        encoder.encode(
+            "4 0 obj\n" +
+            "<< /Type /XObject " +
+            "/Subtype /Image " +
+            "/Width " + width + " " +
+            "/Height " + height + " " +
+            "/ColorSpace /DeviceRGB " +
+            "/BitsPerComponent 8 " +
+            "/Filter /DCTDecode " +
+            "/Length " + imageBytes.length +
+            " >>\nstream\n"
+        );
+
+    offsets.push(position);
+
+    objects.push(imageHeader);
+
+    position += imageHeader.length;
+
+    objects.push(imageBytes);
+
+    position += imageBytes.length;
+
+    const imageEnd =
+        encoder.encode(
+            "\nendstream\nendobj\n"
+        );
+
+    objects.push(imageEnd);
+
+    position += imageEnd.length;
+
+
+    /*
+       Object 5 — page content
+    */
+
+    const content =
+        "q\n" +
+        width + " 0 0 " +
+        height +
+        " 0 0 cm\n" +
+        "/Im4 Do\n" +
+        "Q";
+
+    addObject(
+        "5 0 obj\n" +
+        "<< /Length " +
+        content.length +
+        " >>\n" +
+        "stream\n" +
+        content +
+        "\nendstream\n" +
+        "endobj\n"
+    );
+
+
+    /*
+       XREF
+    */
+
+    const xrefPosition =
+        position;
+
+    let xref =
+        "xref\n" +
+        "0 6\n" +
+        "0000000000 65535 f \n";
+
+    for(let i=1;i<offsets.length;i++){
+
+        xref +=
+            String(offsets[i])
+            .padStart(10,"0") +
+            " 00000 n \n";
+
+    }
+
+    xref +=
+        "trailer\n" +
+        "<< /Size 6 /Root 1 0 R >>\n" +
+        "startxref\n" +
+        xrefPosition +
+        "\n%%EOF";
+
+    objects.push(
+        encoder.encode(xref)
+    );
+
+
+    /*
+       Combine all pieces
+    */
+
+    let totalLength = 0;
+
+    objects.forEach(
+        part => totalLength += part.length
+    );
+
+    const output =
+        new Uint8Array(totalLength);
+
+    let offset = 0;
+
+    objects.forEach(part=>{
+
+        output.set(part,offset);
+
+        offset += part.length;
+
+    });
+
+    return output;
+
+}
+
+
+/* =========================
+   SHOW RESULT
+========================= */
+
+function showResult(
+    blob,
+    originalName,
+    extension
+){
+
+    if(downloadURL){
+
+        URL.revokeObjectURL(downloadURL);
+
+    }
+
+    downloadURL =
+        URL.createObjectURL(blob);
+
+    let baseName =
+        originalName
+        .replace(/\.[^/.]+$/,"");
+
+    let finalName =
+        baseName +
+        "." +
+        extension;
+
+    result.style.display =
+        "block";
+
+    resultText.textContent =
+        finalName +
+        " is ready.";
+
+    downloadBtn.href =
+        downloadURL;
+
+    downloadBtn.download =
+        finalName;
+
+    downloadBtn.textContent =
+        "Download " +
+        extension.toUpperCase();
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    resetAll
+);
+
+function resetAll(){
+
+    selectedFile = null;
+
+    fileInput.value = "";
+
+    fileInfo.style.display =
+        "none";
+
+    controls.style.display =
+        "none";
+
+    progress.style.display =
+        "none";
+
+    result.style.display =
+        "none";
+
+    preview.style.display = "none";
+
+progressFill.style.width = "0%";
+
+status.textContent = "Preparing...";
+
+if(downloadURL) {
+
+URL.revokeObjectURL( downloadURL );
+
+}
+
+}
+
+downloadURL = null;
+  
+  /* =========================
+   UTILITIES
+========================= */
+
+
+function formatBytes(bytes) {
+
+if(bytes === 0) return "0 Bytes";
+
+const sizes = [
+    "Bytes", "KB", "MB", "GB"
+];
+
+const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+return parseFloat(
+    (bytes / Math.pow(1024, i)).toFixed(2)
+) + " " + sizes[i];
+
+}
+
+function escapeHTML(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function loadScript(src){
+
+return new Promise( (resolve, reject)=>{
+
+const script =
+
+document.createElement("script");
+
+script.src = src;
+
+script.onload = resolve;
+
+script.onerror= reject;
+
+document.head.appendChild( script );
+
+} );
+
+}
+
+</script>
+
+</body>
+
+</html>
